@@ -147,3 +147,11 @@ class DoublyLinkedList:
                 max_val = current.value
             current = current.next
         return max_val
+
+
+# slow_iter = self.add_to_head
+#     fast_iter = self.head
+#         while (fast_iter != None):           
+#             fast_iter = fast_iter.next.next
+#             slow_iter = slow_iter
+#             return slow_iter
