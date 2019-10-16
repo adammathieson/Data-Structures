@@ -28,7 +28,7 @@ class LRUCache:
     def get(self, key):
         if key in self.storage:
             node = self.storage[key]
-            self.order.move_to_front(node)
+            self.order.move_to_front(key)
             return node
         else:
             None
@@ -47,25 +47,38 @@ class LRUCache:
         #See if it's in the dict
         if key in self.storage:
             self.storage[key] = value
-            self.storage[key].value = value
+            # self.storage[key].value = value
             self.order.move_to_front(key)
+        elif self.size == self.limit:
+            print("Tail+++++>", self.order.tail.value)
+            print("Head+++++>", self.order.head.value)
+            key_to_delete = self.order.remove_from_tail()
+            self.storage.pop(key_to_delete)
+            self.storage[key] = value
+            self.order.add_to_head(key)
         else:
             self.storage[key] = value
-            if self.size == self.limit:
-                self.order.remove_from_tail()
-                self.order.add_to_head(key)
-            else:
+            self.order.add_to_head(key)
+            if self.size < self.limit:
                 self.size += 1
-                self.order.add_to_head(key)
 
-
-        
             
-test = {}
-test['a'] = 1
-test['b'] = 2
-test['a'] = 2
+# test = {}
+# test['a'] = 1
+# test['b'] = 2
+# # test['a'] = 2
 
+# test.pop('a')
 
-print(test)
+# print(DoublyLinkedList())
 
+# print(test)
+
+# test = LRUCache()
+
+# test.set("a", 10)
+# test.set("b", 1)
+# test.set("c", 1)
+
+# print(test.get("a"))
+# print(test.order.tail.value)
