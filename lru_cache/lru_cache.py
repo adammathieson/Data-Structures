@@ -1,6 +1,7 @@
 import sys
 sys.path.append('../doubly_linked_list')
 from doubly_linked_list import DoublyLinkedList
+from doubly_linked_list import ListNode
 
 class LRUCache:
     """
@@ -10,11 +11,11 @@ class LRUCache:
     order, as well as a storage dict that provides fast access
     to every node stored in the cache.
     """
-    def __init__(self, limit=10):
+    def __init__(self, limit=3):
         self.limit = limit
         self.size = 0
         self.order = DoublyLinkedList()
-        self.storage = {}
+        self.storage = dict()
 
 
 
@@ -28,10 +29,12 @@ class LRUCache:
     def get(self, key):
         if key in self.storage:
             node = self.storage[key]
-            self.order.move_to_front(key)
-            return node
+            print("------>", node)
+            # node.value = (key, value)
+            self.order.move_to_front(node)
+            return node.value[1]
         else:
-            None
+            return None
 
     """
     Adds the given key-value pair to the cache. The newly-
@@ -44,23 +47,36 @@ class LRUCache:
     the newly-specified value.
     """
     def set(self, key, value):
+        print(self.storage)
         #See if it's in the dict
         if key in self.storage:
-            self.storage[key] = value
-            # self.storage[key].value = value
-            self.order.move_to_front(key)
+
+            node = self.storage[key]
+            node.value = (key, value)
+            # print("---->node", node)
+            self.order.move_to_front(node)
         elif self.size == self.limit:
-            print("Tail+++++>", self.order.tail.value)
-            print("Head+++++>", self.order.head.value)
+            # print("Tail+++++>", self.order.tail.value)
+            # print("Head+++++>", self.order.head.value)
             key_to_delete = self.order.remove_from_tail()
-            self.storage.pop(key_to_delete)
-            self.storage[key] = value
-            self.order.add_to_head(key)
-        else:
-            self.storage[key] = value
-            self.order.add_to_head(key)
-            if self.size < self.limit:
-                self.size += 1
+            # print("key to delete", key_to_delete[0])
+            del self.storage[key_to_delete[0]]
+            # self.order.remove_from_tail()
+            self.size -= 1
+
+        #     self.storage[key] = value
+        #     node = self.storage[key]
+        #     self.order.add_to_head(node)
+        # else:
+        # self.storage[key] = value
+            # node = self.storage[key]
+            # self.order.add_to_head((key, value))
+            # if self.size < self.limit:
+            #     self.size += 1
+        self.order.add_to_head((key, value))
+        self.storage[key] = self.order.head
+        # print(self.order.head)
+        self.size += 1
 
             
 # test = {}
@@ -69,16 +85,18 @@ class LRUCache:
 # # test['a'] = 2
 
 # test.pop('a')
+# node = test['b']
 
 # print(DoublyLinkedList())
 
-# print(test)
+# print(node)
 
 # test = LRUCache()
 
 # test.set("a", 10)
 # test.set("b", 1)
 # test.set("c", 1)
+# # test.set("d", 45)
 
-# print(test.get("a"))
 # print(test.order.tail.value)
+# print(test.get("a"))
