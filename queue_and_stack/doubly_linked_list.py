@@ -69,6 +69,7 @@ class DoublyLinkedList:
     Returns the value of the removed Node."""
     def remove_from_head(self):
         value = self.head.value
+        print("value: ",value)
         self.delete(self.head)
         return value
 
@@ -83,7 +84,7 @@ class DoublyLinkedList:
             self.tail = new_node
         else:
             # new_node.next = self.head
-            self.tail.next = new_node
+            # self.tail.next = new_node
             self.tail = new_node
         
         self.length += 1
@@ -146,3 +147,11 @@ class DoublyLinkedList:
                 max_val = current.value
             current = current.next
         return max_val
+
+
+# slow_iter = self.add_to_head
+#     fast_iter = self.head
+#         while (fast_iter != None):           
+#             fast_iter = fast_iter.next.next
+#             slow_iter = slow_iter
+#             return slow_iter
